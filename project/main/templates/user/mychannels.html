@@ -1,0 +1,48 @@
+{% extends 'user/userpage.html' %}
+
+{% block title %}
+Мои каналы
+{% endblock %}
+
+{% block href %}
+
+
+<div class="container">
+    <div class="container">
+        <h3>Создать новый канал</h3>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="user" value="{{ user.id }}">
+            <h4>Название канала:</h4>
+            {{ form.name }}<br>
+            <sapan>{{ error }}</sapan>
+            <input type="submit" class="btn btn-success" value="Создать канал">
+        </form>
+    </div>
+</div>
+<h4>Мои каналы</h4>
+{% if channels %}
+<div class="alert alert-info">
+    <ul>
+    {% for channel in channels %}
+        {% if channel.user_id == user.id %}
+            <script>
+                function deleteChannel(channel_id) {
+                    if (confirm("Вы уверены, что хотите удалить канал?")) {
+                        window.location.href = '/delete_channel/' + channel_id;  // URL для удаления канала
+                    }
+                }
+            </script>
+            <li><a style="text-transform:capitalize" href="{% url 'mychannelpage' user.id channel.id %}">{{ channel.name }}</a>
+                    <button class="btn btn-danger" onclick="deleteChannel({{channel.id }})">Удалить канал</button></li>
+
+
+        {% endif %}
+    {% endfor %}
+    </ul>
+</div>
+{% else %}
+<p>У вас еще нет статей</p>
+{% endif %} 
+
+{% endblock %}

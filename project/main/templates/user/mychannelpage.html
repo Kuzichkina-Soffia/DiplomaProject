@@ -1,0 +1,44 @@
+{% extends 'user/userpage.html' %}
+
+{% block title %}
+Страница канала "{{ channel.name }}"
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Канал "{{ channel.name }}"</h2>
+
+    <div class="container">
+        <h3>Создать новую статью</h3>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="channel" value="{{ channel.id }}">
+            <h4>Название статьи:</h4>
+            {{ form.title }}<br>
+            <h4>Анонс статьи:</h4>
+            {{ form.intro }}<br>
+            <h4>Текст статьи:</h4>
+            {{ form.content }}<br>
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    {{ form.errors }}
+                </div>
+            {% endif %}
+            <input type="submit" class="btn btn-success" value="Создать статью">
+        </form>
+    </div>
+
+    <h2>Список статей канала</h2>
+    {% if articles %}
+    <div class="alert alert-info">
+        <ul>
+        {% for article in articles %}
+            <li><a style="text-transform:capitalize">{{ article.title }}</a></li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+    <p>У вас еще нет статей</p>
+    {% endif %} 
+</div>
+{% endblock %}
